@@ -9,7 +9,8 @@ const getCustomers = asyncHandler(async() => {
                 email: true,
                 first_name: true,
                 last_name: true,
-                customer_image: true
+                customer_image: true,
+                role_id: true,
             }
         }
     )
@@ -24,9 +25,10 @@ const postCustomer = asyncHandler(async(fields) => {
                     email: fields.email,
                     first_name: fields.first_name,
                     last_name: fields.last_name,
-                    contact: parseInt(fields.contact),
+                    contact: fields.contact,
                     password: fields.password,
-                    customer_image: fields.image
+                    customer_image: fields.image,
+                    role_id: fields.role_id
             }   
         }
     )

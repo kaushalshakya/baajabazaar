@@ -37,9 +37,10 @@ const registerCustomer = asyncHandler(async(req, res) =>{
         email: req.body.email,
         first_name: req.body.first_name,
         last_name: req.body.last_name,
-        contact: req.body.contact,
+        contact: parseInt(req.body.contact),
         password: hash,
-        image: image ? image.filename : null
+        image: image ? image.filename : null,
+        role_id: 1
     }
 
     const result = await postCustomer(data);
