@@ -2,6 +2,24 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient;
 const asyncHandler = require('express-async-handler');
 
+const vendorRegisterModel = asyncHandler(async (fields) =>{
+    const response = await prisma.vendors.create(
+       { 
+            data : {
+                vendor_name: fields.vendor_name,
+                vendor_location: fields.vendor_location,
+                contact: fields.contact,
+                email: fields.email,
+                password: fields.password,
+                vendor_image: fields.image,
+                role_id: fields.role_id
+            }
+        }
+    )
+    await prisma.$disconnect();
+    return response;
+})
+
 const vendorLoginModel = asyncHandler(async(email, password) =>{
     const response = await prisma.vendors.findFirst(
         {
@@ -45,6 +63,7 @@ const vendorLogoutModel = asyncHandler(async (email) => {
 })
 
 module.exports = {
+    vendorRegisterModel,
     vendorLoginModel,
     setRefreshToken,
     vendorLogoutModel

@@ -13,6 +13,7 @@ const PORT = process.env.PORT || 4000;
 
 app.use(express.json());
 app.use(cookieParser());
+const verifyJwt = require('./middlewares/verifyJWT');
 
 app.get('/', (req, res) =>{
     res.status(200).json(
@@ -22,11 +23,13 @@ app.get('/', (req, res) =>{
         }
     )
 })
+app.use('/api/v1/vendor-auth', vendorAuthRoutes);
+app.use('/api/v1/customer-auth', customerAuthRoutes);
+
+app.use(verifyJwt);
 
 app.use('/api/v1/vendor', vendorRoutes);
 app.use('/api/v1/customer', customerRoutes);
-app.use('/api/v1/vendor-auth', vendorAuthRoutes);
-app.use('/api/v1/customer-auth', customerAuthRoutes);
 app.use(errorHandler);
 
 app.listen(PORT, () => {

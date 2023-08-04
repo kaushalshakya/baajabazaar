@@ -18,17 +18,31 @@ const getVendor = asyncHandler(async() => {
     return response;
 })
 
-const postVendor = asyncHandler(async (fields) =>{
-    const response = await prisma.vendors.create(
-       { 
+const checkPasswordMatch = asyncHandler(async (id) => {
+    const response = await prisma.vendors.findFirst(
+        {
+            where: {
+                id
+            }
+        }
+    )
+    await prisma.$disconnect();
+    return response;
+})
+
+const putVendor = asyncHandler(async (id, fields) => {
+    const response = await prisma.vendors.update(
+        {
+            where: {
+                id
+            },
             data : {
+                email: fields.email,
                 vendor_name: fields.vendor_name,
                 vendor_location: fields.vendor_location,
                 contact: fields.contact,
-                email: fields.email,
-                password: fields.password,
-                vendor_image: fields.image,
-                role_id: fields.role_id
+                vendor_image: fields.vendor_image,
+                password: fields.vendor_password
             }
         }
     )
@@ -38,5 +52,6 @@ const postVendor = asyncHandler(async (fields) =>{
 
 module.exports = {
     getVendor,
-    postVendor
+    putVendor,
+    checkPasswordMatch
 }

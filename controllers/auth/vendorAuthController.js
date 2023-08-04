@@ -1,12 +1,37 @@
 const {
     vendorLoginModel,
     setRefreshToken,
-    vendorLogoutModel
+    vendorLogoutModel,
+    vendorRegisterModel
 } = require('../../models/auth/vendorAuthModels')
 const asyncHandler = require('express-async-handler');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 require('dotenv').config();
+
+const registerVendor = asyncHandler(async(req, res) =>{
+    const password = req.body.password;
+    const image = req.file;
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(password, salt);
+    const data = {
+        vendor_name: req.body.vendor_name,
+        vendor_location: req.body.vendor_location,
+        contact: parseInt(req.body.contact),
+        email: req.body.email,
+        password: hash,
+        image: image? image.filename : null,
+        role_id: 2 
+    }
+    console.log(data.contact);
+    const result = await vendorRegisterModel(data);
+    return res.status(200).json(
+        {
+            status: 200,
+            message: 'Vendor registered successfully!'
+        }
+    )
+})
 
 const vendorLogin = asyncHandler(async(req, res) => {
     const { email, password } = req.body;
@@ -100,6 +125,7 @@ const vendorLogout = asyncHandler(async(req, res) => {
 })
 
 module.exports = {
+    registerVendor,
     vendorLogin,
     vendorLogout
 }
