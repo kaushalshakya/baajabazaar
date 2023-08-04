@@ -66,7 +66,8 @@ const vendorLogin = asyncHandler(async(req, res) => {
 
     const accessToken = jwt.sign(
         {
-            email,
+            id: result.id,
+            email: result.email,
             vendor_name: result.vendor_name,
             role: result.role_id
         },
@@ -76,7 +77,8 @@ const vendorLogin = asyncHandler(async(req, res) => {
 
     const refreshToken = jwt.sign(
         {
-            email,
+            id: result.id,
+            email: result.email,
             vendor_name: result.vendor_name,
             role: result.role_id
         },

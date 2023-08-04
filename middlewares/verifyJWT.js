@@ -23,7 +23,6 @@ const verifyJwt = (req, res, next) => {
                 }
             )
         }
-        console.log(decoded);
         req.id = decoded.id;
         req.role = decoded.role;
         req.email = decoded.email;

@@ -50,8 +50,21 @@ const putVendor = asyncHandler(async (id, fields) => {
     return response;
 })
 
+const deleteVendorModel = asyncHandler(async (id) => {
+    const response = await prisma.vendors.delete(
+        {
+            where: {
+                id
+            }
+        }
+    )
+    await prisma.$disconnect();
+    return response;
+})
+
 module.exports = {
     getVendor,
     putVendor,
-    checkPasswordMatch
+    checkPasswordMatch,
+    deleteVendorModel
 }
