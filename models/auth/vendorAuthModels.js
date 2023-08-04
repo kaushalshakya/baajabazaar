@@ -29,7 +29,23 @@ const setRefreshToken = asyncHandler(async(email, refreshToken) => {
     return response;
 })
 
+const vendorLogoutModel = asyncHandler(async (email) => {
+    const response = await prisma.vendors.update(
+        {
+            where:{
+                email
+            },
+            data : {
+                refresh_token: null
+            }
+        }
+    )
+    await prisma.$disconnect();
+    return response;
+})
+
 module.exports = {
     vendorLoginModel,
-    setRefreshToken
+    setRefreshToken,
+    vendorLogoutModel
 }

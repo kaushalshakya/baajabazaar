@@ -1,6 +1,7 @@
 const {
     vendorLoginModel,
-    setRefreshToken
+    setRefreshToken,
+    vendorLogoutModel
 } = require('../../models/auth/vendorAuthModels')
 const asyncHandler = require('express-async-handler');
 const jwt = require('jsonwebtoken');
@@ -73,6 +74,32 @@ const vendorLogin = asyncHandler(async(req, res) => {
     )
 })
 
+const vendorLogout = asyncHandler(async(req, res) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader.split(' ')[1];
+
+    jwt.verify(token, process.env.ACCESS_TOKEN, async (err, decoded) => {
+        if(err) {
+            return res.status(400).json(
+                {
+                    status: 400,
+                    message: 'Token tampered or expired'
+                }
+            ) 
+        }else{
+            const email = decoded.email;
+            await vendorLogoutModel(email);
+            return res.status(200).json(
+                {
+                    status: 200,
+                    message: 'Logged out successfully'
+                }
+            )
+        }
+    })
+})
+
 module.exports = {
-    vendorLogin
+    vendorLogin,
+    vendorLogout
 }
