@@ -5,7 +5,8 @@ const cookieParser = require('cookie-parser');
 const {
     vendorRoutes,
     customerRoutes,
-    vendorAuthRoutes
+    vendorAuthRoutes,
+    customerAuthRoutes
 } = require('./routes');
 
 const PORT = process.env.PORT || 4000;
@@ -25,6 +26,7 @@ app.get('/', (req, res) =>{
 app.use('/api/v1/vendor', vendorRoutes);
 app.use('/api/v1/customer', customerRoutes);
 app.use('/api/v1/vendor-auth', vendorAuthRoutes);
+app.use('/api/v1/customer-auth', customerAuthRoutes);
 app.use(errorHandler);
 
 app.listen(PORT, () => {
