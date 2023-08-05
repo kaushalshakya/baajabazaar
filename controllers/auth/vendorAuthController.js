@@ -17,7 +17,7 @@ const registerVendor = asyncHandler(async(req, res) =>{
     const data = {
         vendor_name: req.body.vendor_name,
         vendor_location: req.body.vendor_location,
-        contact: parseInt(req.body.contact),
+        contact: req.body.contact,
         email: req.body.email,
         password: hash,
         image: image? image.filename : null,
