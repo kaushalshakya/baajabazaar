@@ -45,7 +45,7 @@ model products {
   product_image       String
   product_description String
   vendor_id           Int
-  vendor              vendors @relation(fields: [vendor_id], references: [id])
+  vendor              vendors @relation(fields: [vendor_id], references: [id], onDelete: Cascade)
 
   @@index([vendor_id], map: "products_vendor_id_fkey")
 }
