@@ -8,8 +8,8 @@ datasource db {
 }
 
 model users {
-  id             Int     @id @default(autoincrement())
-  email          String  @unique
+  id             Int      @id @default(autoincrement())
+  email          String   @unique
   first_name     String
   last_name      String
   contact        String
@@ -17,7 +17,8 @@ model users {
   role_id        Int
   refresh_token  String?
   password       String
-  role           roles   @relation(fields: [role_id], references: [id])
+  role           roles    @relation(fields: [role_id], references: [id])
+  orders         orders[]
 
   @@index([role_id], map: "users_role_id_fkey")
 }
@@ -39,13 +40,16 @@ model vendors {
 }
 
 model products {
-  id                  Int     @id @default(autoincrement())
+  id                  Int             @id @default(autoincrement())
   product_name        String
   product_price       Int
   product_image       String
   product_description String
   vendor_id           Int
-  vendor              vendors @relation(fields: [vendor_id], references: [id], onDelete: Cascade)
+  category            categories?     @relation(fields: [product_category], references: [id], onDelete: SetNull)
+  product_category    Int?
+  vendor              vendors         @relation(fields: [vendor_id], references: [id], onDelete: Cascade)
+  order_details       order_details[]
 
   @@index([vendor_id], map: "products_vendor_id_fkey")
 }
@@ -55,4 +59,28 @@ model roles {
   role_name String
   users     users[]
   vendors   vendors[]
+}
+
+model orders {
+  id            Int             @id @default(autoincrement())
+  customer_id   Int
+  orderDate     DateTime        @default(now())
+  user          users           @relation(fields: [customer_id], references: [id], onDelete: Cascade)
+  order_details order_details[]
+}
+
+model order_details {
+  id               Int      @id @default(autoincrement())
+  order_id         Int
+  product_id       Int
+  quantity         Int
+  shipping_address String
+  order            orders   @relation(fields: [order_id], references: [id])
+  product          products @relation(fields: [product_id], references: [id])
+}
+
+model categories {
+  id            Int        @id @default(autoincrement())
+  category_name String
+  products      products[]
 }
