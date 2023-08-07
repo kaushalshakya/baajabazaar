@@ -15,7 +15,9 @@ const PORT = process.env.PORT || 4000;
 
 app.use(express.json());
 app.use(cookieParser());
+
 const verifyJwt = require('./middlewares/verifyJWT');
+const handler404 = require('./middlewares/404handler');
 
 app.get('/', (req, res) =>{
     res.status(200).json(
@@ -35,6 +37,7 @@ app.use('/api/v1/customer', customerRoutes);
 app.use('/api/v1/products', productRoutes);
 app.use('/api/v1/cart', cartRoutes);
 app.use(errorHandler);
+app.use('*', handler404);
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
