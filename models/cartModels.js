@@ -2,19 +2,34 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient;
 const asyncHandler = require('express-async-handler');
 
-const getCart = asyncHandler(async (id) => {
-    const response = await prisma.cart.findMany(
+const getCart = asyncHandler(async(user_id) => {
+    const response = await prisma.cart_details.findMany(
         {
-            where: 
-            {
-                id
+            where : {
+                user_id
             }
         }
     )
     await prisma.$disconnect();
-    return response; 
+    return response;
+})
+
+const postCart = asyncHandler(async(fields) => {
+    const response = await prisma.cart_details.create(
+            {
+            data: {
+                user_id: fields.user_id,
+                quantity: fields.quantity,
+                product_id: fields.product_id,
+                total_amount: fields.total_amount
+            }
+        }
+      );
+    await prisma.$disconnect();
+    return response;
 })
 
 module.exports = {
-    getCart
+    getCart,
+    postCart
 }

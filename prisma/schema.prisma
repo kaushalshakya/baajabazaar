@@ -19,6 +19,7 @@ model users {
   password       String
   role           roles    @relation(fields: [role_id], references: [id])
   orders         orders[]
+  cart           cart_details[]
 
   @@index([role_id], map: "users_role_id_fkey")
 }
@@ -50,7 +51,7 @@ model products {
   product_category    Int?
   vendor              vendors         @relation(fields: [vendor_id], references: [id], onDelete: Cascade)
   order_details       order_details[]
-  cart                cart[]
+  cart                cart_details[]
 
   @@index([vendor_id], map: "products_vendor_id_fkey")
 }
@@ -86,8 +87,10 @@ model categories {
   products      products[]
 }
 
-model cart {
+model cart_details {
   id           Int      @id @default(autoincrement())
+  user         users    @relation(fields: [user_id], references: [id])
+  user_id      Int
   quantity     Int      @default(1)
   product      products @relation(fields: [product_id], references: [id])
   product_id   Int

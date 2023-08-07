@@ -7,7 +7,8 @@ const {
     customerRoutes,
     vendorAuthRoutes,
     customerAuthRoutes,
-    productRoutes
+    productRoutes,
+    cartRoutes
 } = require('./routes');
 
 const PORT = process.env.PORT || 4000;
@@ -32,6 +33,7 @@ app.use(verifyJwt);
 app.use('/api/v1/vendor', vendorRoutes);
 app.use('/api/v1/customer', customerRoutes);
 app.use('/api/v1/products', productRoutes);
+app.use('/api/v1/cart', cartRoutes);
 app.use(errorHandler);
 
 app.listen(PORT, () => {
