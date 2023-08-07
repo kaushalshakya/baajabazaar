@@ -4,6 +4,7 @@ const vendorAuthRoutes = require('./auth/vendorAuthRoutes');
 const customerAuthRoutes = require('./auth/customerAuthRoutes');
 const productRoutes = require('./productRoutes');
 const cartRoutes = require('./cartRoutes');
+const homePageRoute = require('./homePageRoute');
 
 module.exports = {
     vendorRoutes,
@@ -11,5 +12,6 @@ module.exports = {
     vendorAuthRoutes,
     customerAuthRoutes,
     productRoutes,
-    cartRoutes
+    cartRoutes,
+    homePageRoute
 }
