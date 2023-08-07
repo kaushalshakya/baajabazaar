@@ -50,6 +50,7 @@ model products {
   product_category    Int?
   vendor              vendors         @relation(fields: [vendor_id], references: [id], onDelete: Cascade)
   order_details       order_details[]
+  cart                cart[]
 
   @@index([vendor_id], map: "products_vendor_id_fkey")
 }
@@ -83,4 +84,12 @@ model categories {
   id            Int        @id @default(autoincrement())
   category_name String
   products      products[]
+}
+
+model cart {
+  id           Int      @id @default(autoincrement())
+  quantity     Int      @default(1)
+  product      products @relation(fields: [product_id], references: [id])
+  product_id   Int
+  total_amount Int
 }
