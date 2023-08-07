@@ -45,9 +45,10 @@ const productById = asyncHandler(async(req, res) => {
 
 const createProduct = asyncHandler(async (req, res) => {
     const id = req.id;
+    const role = req.role;
     const image = req.file;
 
-    if(id !== 2){
+    if(role !== 2){
         return res.status(401).json(
             {
                 status: 403,

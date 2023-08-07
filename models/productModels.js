@@ -12,7 +12,7 @@ const getVendorProducts = asyncHandler(async (id) => {
     const response = await prisma.products.findMany(
         {
             where: {
-                id
+                vendor_id: id
             }
         }
     )
