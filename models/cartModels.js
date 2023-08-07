@@ -14,12 +14,23 @@ const getCart = asyncHandler(async(user_id) => {
     return response;
 })
 
+const getCartById = asyncHandler(async (id) => {
+    const response = await prisma.cart_details.findFirst(
+        {
+            where : {
+                id
+            }
+        }
+    )
+    await prisma.$disconnect();
+    return response;
+})
+
 const postCart = asyncHandler(async(fields) => {
     const response = await prisma.cart_details.create(
             {
             data: {
                 user_id: fields.user_id,
-                quantity: fields.quantity,
                 product_id: fields.product_id,
                 total_amount: fields.total_amount
             }
@@ -29,7 +40,38 @@ const postCart = asyncHandler(async(fields) => {
     return response;
 })
 
+const putCart = asyncHandler(async(quantity, totalAmount, id) => {
+    const response = await prisma.cart_details.update(
+        {
+            where: {
+                id
+            },
+            data : {
+                quantity,
+                total_amount: totalAmount
+            }
+        }
+    )
+    await prisma.$disconnect();
+    return response;
+})
+
+const deleteCartItem = asyncHandler(async (id) => {
+    const respone = await prisma.cart_details.delete(
+        {
+            where: { 
+                id
+            }
+        }
+    )
+    await prisma.$disconnect();
+    return respone;
+})
+
 module.exports = {
     getCart,
-    postCart
+    getCartById,
+    postCart,
+    putCart,
+    deleteCartItem
 }

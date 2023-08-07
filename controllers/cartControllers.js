@@ -1,6 +1,8 @@
 const {
     getCart,
-    postCart
+    postCart,
+    putCart,
+    deleteCartItem
 } = require('../models/cartModels');
 const asyncHandler = require('express-async-handler');
 const { getProductById } = require('../models/productModels');
@@ -18,13 +20,11 @@ const cartItems = asyncHandler(async (req, res) => {
 })
 
 const addToCart = asyncHandler(async (req, res) => {
-    const quantity = parseInt(req.body.quantity);
     const product = parseInt(req.body.product_id);
     const id = parseInt(req.id);
     const productPrice = await getProductById(product);
-    const amount = quantity * productPrice.product_price;
+    const amount = productPrice.product_price;
     const data = {
-        quantity: quantity,
         product_id: product,
         total_amount: amount,
         user_id: id
@@ -38,7 +38,34 @@ const addToCart = asyncHandler(async (req, res) => {
     )
 })
 
+const updateCart = asyncHandler(async (req, res) => {
+    const quantity = parseInt(req.body.quantity);
+    const id = parseInt(req.body.cart_id);
+    const product = await getProductById(id);
+    const totalAmount = quantity * product.product_price;
+    const result = await putCart(quantity, totalAmount, id);
+    return res.status(200).json(
+        {
+            status: 200,
+            message: 'Cart details updated successfully'
+        }
+    )
+})
+
+const deleteCart = asyncHandler(async (req, res) => {
+    const id = parseInt(req.body.id);
+    const result = await deleteCartItem(id);
+    return res.status(200).json(
+        {
+            status: 200,
+            message: 'Item deleted from cart'
+        }
+    )
+})
+
 module.exports = {
     cartItems,
-    addToCart
+    addToCart,
+    updateCart,
+    deleteCart
 }
