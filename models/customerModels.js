@@ -62,9 +62,25 @@ const deleteCustomerModel = asyncHandler(async (id) => {
     return response;
 })
 
+const getCustomerById = asyncHandler(async (id) => {
+    const response = await prisma.users.findFirst(
+        {
+            where : {
+                id
+            },
+            select : {
+                contact : true
+            }
+        }
+    )
+    await prisma.$disconnect();
+    return response;
+})
+
 module.exports = {
     getCustomers,
     checkCustomers,
     putCustomers,
-    deleteCustomerModel
+    deleteCustomerModel,
+    getCustomerById
 }
