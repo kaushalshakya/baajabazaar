@@ -4,9 +4,21 @@ const {
     postOrder,
     getUserCartItems,
     postOrderDetails,
-    updateTotal
+    updateTotal,
+    getUserOrders
 } = require('../models/orderModels');
 const asyncHandler = require('express-async-handler');
+
+const viewOrder = asyncHandler(async (req, res) => {
+    const id = req.id;
+    const order = await getUserOrders(id);
+    return res.status(200).json(
+        {
+            status: 200,
+            order: order
+        }
+    )
+})
 
 const createOrder = asyncHandler(async (req, res) => {
     const id = req.id;
@@ -50,5 +62,6 @@ const createOrder = asyncHandler(async (req, res) => {
 })
 
 module.exports = {
+    viewOrder,
     createOrder
 }
