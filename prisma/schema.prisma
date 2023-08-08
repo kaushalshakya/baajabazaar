@@ -8,8 +8,8 @@ datasource db {
 }
 
 model users {
-  id             Int      @id @default(autoincrement())
-  email          String   @unique
+  id             Int            @id @default(autoincrement())
+  email          String         @unique
   first_name     String
   last_name      String
   contact        String
@@ -17,7 +17,7 @@ model users {
   role_id        Int
   refresh_token  String?
   password       String
-  role           roles    @relation(fields: [role_id], references: [id])
+  role           roles          @relation(fields: [role_id], references: [id])
   orders         orders[]
   cart           cart_details[]
 
@@ -66,6 +66,7 @@ model roles {
 model orders {
   id            Int             @id @default(autoincrement())
   customer_id   Int
+  total_amount  Int             @default(0)
   orderDate     DateTime        @default(now())
   user          users           @relation(fields: [customer_id], references: [id], onDelete: Cascade)
   order_details order_details[]
@@ -77,6 +78,7 @@ model order_details {
   product_id       Int
   quantity         Int
   shipping_address String
+  total_amount     Int?
   order            orders   @relation(fields: [order_id], references: [id])
   product          products @relation(fields: [product_id], references: [id])
 }
