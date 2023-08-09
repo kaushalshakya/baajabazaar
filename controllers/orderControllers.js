@@ -9,7 +9,8 @@ const {
     getOrderDetails,
     emptyCartModel,
     getRecentOrder,
-    getRecentOrderDetails
+    getRecentOrderDetails,
+    deleteOrder
 } = require('../models/orderModels');
 const asyncHandler = require('express-async-handler');
 
@@ -80,8 +81,20 @@ const createOrder = asyncHandler(async (req, res) => {
 
 })
 
+const cancelOrder = asyncHandler(async(req, res) => {
+    const id = parseInt(req.params.id);
+    const result = await deleteOrder(id);
+    return res.status(200).json(
+        {
+            status: 200,
+            message: 'Order cancelled'
+        }
+    )
+})
+
 module.exports = {
     viewOrderHistory,
     createOrder,
-    recentOrder
+    recentOrder,
+    cancelOrder
 }

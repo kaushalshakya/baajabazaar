@@ -177,6 +177,17 @@ const emptyCartModel = asyncHandler(async(user_id) => {
     return response;
 })
 
+const deleteOrder = asyncHandler(async (id) => {
+    const response = await prisma.orders.delete(
+        {
+            where: {
+                id
+            }
+        }
+    )
+    await prisma.$disconnect();
+    return response;
+})
 
 module.exports = {
     postOrder,
@@ -187,5 +198,6 @@ module.exports = {
     getOrderDetails,
     emptyCartModel,
     getRecentOrder,
-    getRecentOrderDetails
+    getRecentOrderDetails,
+    deleteOrder
 }
