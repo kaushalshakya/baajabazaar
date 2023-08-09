@@ -8,8 +8,8 @@ datasource db {
 }
 
 model users {
-  id             Int            @id @default(autoincrement())
-  email          String         @unique
+  id             Int             @id @default(autoincrement())
+  email          String          @unique
   first_name     String
   last_name      String
   contact        String
@@ -17,9 +17,10 @@ model users {
   role_id        Int
   refresh_token  String?
   password       String
-  role           roles          @relation(fields: [role_id], references: [id])
+  role           roles           @relation(fields: [role_id], references: [id])
   orders         orders[]
   cart           cart_details[]
+  order_details  order_details[]
 
   @@index([role_id], map: "users_role_id_fkey")
 }
@@ -75,13 +76,15 @@ model orders {
 }
 
 model order_details {
-  id               Int      @id @default(autoincrement())
-  order_id         Int
-  product_id       Int
-  quantity         Int
-  total_amount     Int?     @default(0)
-  order            orders   @relation(fields: [order_id], references: [id])
-  product          products @relation(fields: [product_id], references: [id])
+  id           Int      @id @default(autoincrement())
+  order_id     Int
+  product_id   Int
+  quantity     Int
+  total_amount Int?     @default(0)
+  customer     users    @relation(fields: [customer_id], references: [id])
+  customer_id  Int
+  order        orders   @relation(fields: [order_id], references: [id], onDelete: Cascade)
+  product      products @relation(fields: [product_id], references: [id])
 }
 
 model categories {

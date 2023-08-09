@@ -11,6 +11,7 @@ const getUserOrders = asyncHandler(async(customer_id) => {
             include : {
                 user: {
                     select : {
+                        id: true,
                         email: true,
                         first_name: true,
                         last_name: true,
@@ -45,7 +46,8 @@ const postOrderDetails = asyncHandler(async(fields) => {
                 order_id: fields.order_id,
                 product_id: fields.product_id,
                 quantity: fields.quantity,
-                total_amount: fields.total_amount
+                total_amount: fields.total_amount,
+                customer_id: fields.customer_id
             }
         }
     )
@@ -86,15 +88,35 @@ const updateTotal = asyncHandler(async(id, total) => {
 })
 
 const getOrderDetails = asyncHandler (async (id) => {
-    const response = await prisma.order_details.findMany(
+    const response = await prisma.order_details.findMany({
+        where: {
+            user_id: id
+        },
+        include: {
+            product: {
+                select: {
+                    product_name: true,
+                    product_price: true,
+                    product_description: true,
+                    product_category: true,
+                    vendor: {
+                        select: {
+                            vendor_name: true
+                        }
+                    }
+                }
+            }
+        }
+    });
+    await prisma.$disconnect();
+    return response;
+})
+
+const emptyCartModel = asyncHandler(async(user_id) => {
+    const response = await prisma.cart_details.deleteMany(
         {
             where : {
-                order_id: id
-            },
-            select : {
-                product_id: true,
-                quantity: true,
-                total_amount: true
+                user_id
             }
         }
     )
@@ -102,11 +124,13 @@ const getOrderDetails = asyncHandler (async (id) => {
     return response;
 })
 
+
 module.exports = {
     postOrder,
     postOrderDetails,
     getUserCartItems,
     updateTotal,
     getUserOrders,
-    getOrderDetails
+    getOrderDetails,
+    emptyCartModel
 }

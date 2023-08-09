@@ -5,17 +5,20 @@ const {
     getUserCartItems,
     postOrderDetails,
     updateTotal,
-    getUserOrders
+    getUserOrders,
+    getOrderDetails,
+    emptyCartModel
 } = require('../models/orderModels');
 const asyncHandler = require('express-async-handler');
 
-const viewOrder = asyncHandler(async (req, res) => {
+const viewOrderHistory = asyncHandler(async (req, res) => {
     const id = req.id;
     const order = await getUserOrders(id);
+    const orderDetails = await getOrderDetails(order.id);
     return res.status(200).json(
         {
             status: 200,
-            order: order
+            orderDetails: orderDetails
         }
     )
 })
@@ -24,12 +27,10 @@ const createOrder = asyncHandler(async (req, res) => {
     const id = req.id;
 
     const user = await getCustomerById(id);
-    console.log(parseInt(user.contact));
-
     const fields = {
         id,
         shipping_address: req.body.shipping_address,
-        contact: parseInt(user.contact)
+        contact: user.contact
     }
     
     const order = await postOrder(fields);
@@ -43,13 +44,15 @@ const createOrder = asyncHandler(async (req, res) => {
         order_id: order.id,
         product_id: cartDetails[i].product_id,
         quantity: cartDetails[i].quantity,
-        total_amount: cartDetails[i].total_amount
+        total_amount: cartDetails[i].total_amount,
+        customer_id: id
        }
        total += cartDetails[i].total_amount;
        const response = await postOrderDetails(fields);
     }
     
-    const updatOrderTotal = await updateTotal(order.id, total);
+    await updateTotal(order.id, total);
+    await emptyCartModel(id);
 
     return res.status(200).json(
         {
@@ -62,6 +65,6 @@ const createOrder = asyncHandler(async (req, res) => {
 })
 
 module.exports = {
-    viewOrder,
+    viewOrderHistory,
     createOrder
 }

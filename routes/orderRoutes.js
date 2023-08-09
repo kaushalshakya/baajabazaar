@@ -1,11 +1,11 @@
 const { 
     createOrder, 
-    viewOrder 
+    viewOrderHistory 
 } = require('../controllers/orderControllers');
 
 const router = require('express').Router();
 
-router.get('/', viewOrder);
+router.get('/history', viewOrderHistory);
 router.post('/', createOrder);
 
 module.exports = router;
