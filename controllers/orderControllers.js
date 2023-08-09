@@ -109,7 +109,28 @@ const createOrder = asyncHandler(async (req, res) => {
 
 const cancelOrder = asyncHandler(async(req, res) => {
     const id = parseInt(req.params.id);
+    const user = await getCustomerById(req.id);
     const result = await deleteOrder(id);
+    const sendEmail = {
+        from: '"BajaBazaar" <noreply@bajabazaar.com>',
+        to: user.email,
+        subject: 'Order Cancellation',
+        text : `
+        Dear ${user.first_name},
+
+        Your order has been cancelled.
+        
+        Thank you for shopping with us!
+        `
+    }
+
+    const email = await transporter.sendMail(sendEmail);
+    
+    if(email){
+        console.log("Message sent: %s", email.messageId);
+    }else { 
+        console.log('Error sending mail: ', email.error);
+    }
     return res.status(200).json(
         {
             status: 200,
