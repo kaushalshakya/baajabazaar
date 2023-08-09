@@ -7,7 +7,9 @@ const {
     updateTotal,
     getUserOrders,
     getOrderDetails,
-    emptyCartModel
+    emptyCartModel,
+    getRecentOrder,
+    getRecentOrderDetails
 } = require('../models/orderModels');
 const asyncHandler = require('express-async-handler');
 
@@ -18,7 +20,21 @@ const viewOrderHistory = asyncHandler(async (req, res) => {
     return res.status(200).json(
         {
             status: 200,
+            message: 'Your purchase history',
             orderDetails: orderDetails
+        }
+    )
+})
+
+const recentOrder = asyncHandler(async (req, res) => {
+    const id = req.id;
+    const order = await getRecentOrder(id);
+    const orderDetails = await getRecentOrderDetails(order.id);
+    return res.status(200).json(
+        {
+            status: 200,
+            message: 'Your order:',
+            data: orderDetails
         }
     )
 })
@@ -66,5 +82,6 @@ const createOrder = asyncHandler(async (req, res) => {
 
 module.exports = {
     viewOrderHistory,
-    createOrder
+    createOrder,
+    recentOrder
 }

@@ -25,6 +25,32 @@ const getUserOrders = asyncHandler(async(customer_id) => {
     return response;
 })
 
+const getRecentOrder = asyncHandler(async (customer_id) => {
+    const response = await prisma.orders.findFirst(
+        {
+            where : {
+                customer_id
+            },
+            orderBy: {
+                id: 'desc'
+            },
+            include : {
+                user: {
+                    select : {
+                        id: true,
+                        email: true,
+                        first_name: true,
+                        last_name: true,
+                        contact: true
+                    }
+                }
+            }
+        }
+    )
+    await prisma.$disconnect();
+    return response; 
+})
+
 const postOrder = asyncHandler(async (fields) => {
     const response = await prisma.orders.create(
         {
@@ -112,6 +138,33 @@ const getOrderDetails = asyncHandler (async (id) => {
     return response;
 })
 
+const getRecentOrderDetails = asyncHandler(async (order_id) => {
+    const response = await prisma.order_details.findMany({
+        where: {
+            order_id
+        },
+        select: {
+            order_id: false, 
+            product: {
+                select: {
+                    product_name: true,
+                    product_price: true,
+                    product_description: true,
+                    product_category: true,
+                    vendor: {
+                        select: {
+                            vendor_name: true
+                        }
+                    }
+                }
+            }
+        }
+    });
+    await prisma.$disconnect();
+    return response;
+});
+
+
 const emptyCartModel = asyncHandler(async(user_id) => {
     const response = await prisma.cart_details.deleteMany(
         {
@@ -132,5 +185,7 @@ module.exports = {
     updateTotal,
     getUserOrders,
     getOrderDetails,
-    emptyCartModel
+    emptyCartModel,
+    getRecentOrder,
+    getRecentOrderDetails
 }
