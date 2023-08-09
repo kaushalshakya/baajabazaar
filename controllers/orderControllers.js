@@ -13,6 +13,7 @@ const {
     deleteOrder
 } = require('../models/orderModels');
 const asyncHandler = require('express-async-handler');
+const transporter = require('../nodemailer');
 
 const viewOrderHistory = asyncHandler(async (req, res) => {
     const id = req.id;
@@ -29,7 +30,9 @@ const viewOrderHistory = asyncHandler(async (req, res) => {
 
 const recentOrder = asyncHandler(async (req, res) => {
     const id = req.id;
+    console.log(id);
     const order = await getRecentOrder(id);
+    console.log(order);
     const orderDetails = await getRecentOrderDetails(order.id);
     return res.status(200).json(
         {
@@ -69,6 +72,29 @@ const createOrder = asyncHandler(async (req, res) => {
     }
     
     await updateTotal(order.id, total);
+    const sendEmail = {
+        from: '"BajaBazaar" <noreply@bajabazaar.com>',
+        to: user.email,
+        subject: 'Order Confirmation',
+        text : `
+        Dear ${user.first_name},
+
+        Your order has been successfully placed.
+        Order ID: ${order.id}
+        Order Total: ${total}
+        
+        Thank you for shopping with us!
+        `
+    }
+
+    const email = await transporter.sendMail(sendEmail);
+    
+    if(email){
+        console.log("Message sent: %s", email.messageId);
+    }else { 
+        console.log('Error sending mail: ', email.error);
+    }
+
     await emptyCartModel(id);
 
     return res.status(200).json(

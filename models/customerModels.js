@@ -69,7 +69,9 @@ const getCustomerById = asyncHandler(async (id) => {
                 id
             },
             select : {
-                contact : true
+                contact : true,
+                email: true,
+                first_name: true
             }
         }
     )
