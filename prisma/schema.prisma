@@ -48,8 +48,8 @@ model products {
   product_image       String
   product_description String
   vendor_id           Int
-  category            categories?     @relation(fields: [product_category], references: [id], onDelete: SetNull)
-  product_category    Int?
+  category            categories     @relation(fields: [product_category], references: [id], onDelete: Cascade)
+  product_category    Int
   vendor              vendors         @relation(fields: [vendor_id], references: [id], onDelete: Cascade)
   order_details       order_details[]
   cart                cart_details[]
@@ -80,7 +80,7 @@ model order_details {
   order_id     Int
   product_id   Int
   quantity     Int
-  total_amount Int?     @default(0)
+  total_amount Int     @default(0)
   customer     users    @relation(fields: [customer_id], references: [id])
   customer_id  Int
   order        orders   @relation(fields: [order_id], references: [id], onDelete: Cascade)
