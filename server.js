@@ -12,6 +12,7 @@ const {
   cartRoutes,
   homePageRoute,
   orderRoutes,
+  categoryRoutes,
 } = require("./routes");
 
 const PORT = process.env.PORT || 4000;
@@ -34,6 +35,7 @@ app.get("/", (req, res) => {
 app.use("/api/v1/home", homePageRoute);
 app.use("/api/v1/vendor-auth", vendorAuthRoutes);
 app.use("/api/v1/customer-auth", customerAuthRoutes);
+app.use("/api/v1/category", categoryRoutes);
 
 app.use(verifyJwt);
 

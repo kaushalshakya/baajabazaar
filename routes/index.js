@@ -1,19 +1,21 @@
-const vendorRoutes = require('./vendorRoutes');
-const customerRoutes = require('./customerRoutes.js');
-const vendorAuthRoutes = require('./auth/vendorAuthRoutes');
-const customerAuthRoutes = require('./auth/customerAuthRoutes');
-const productRoutes = require('./productRoutes');
-const cartRoutes = require('./cartRoutes');
-const homePageRoute = require('./homePageRoute');
-const orderRoutes = require('./orderRoutes');
+const vendorRoutes = require("./vendorRoutes");
+const customerRoutes = require("./customerRoutes.js");
+const vendorAuthRoutes = require("./auth/vendorAuthRoutes");
+const customerAuthRoutes = require("./auth/customerAuthRoutes");
+const productRoutes = require("./productRoutes");
+const cartRoutes = require("./cartRoutes");
+const homePageRoute = require("./homePageRoute");
+const orderRoutes = require("./orderRoutes");
+const categoryRoutes = require("./categoryRoutes");
 
 module.exports = {
-    vendorRoutes,
-    customerRoutes,
-    vendorAuthRoutes,
-    customerAuthRoutes,
-    productRoutes,
-    cartRoutes,
-    homePageRoute,
-    orderRoutes
-}
+  vendorRoutes,
+  customerRoutes,
+  vendorAuthRoutes,
+  customerAuthRoutes,
+  productRoutes,
+  cartRoutes,
+  homePageRoute,
+  orderRoutes,
+  categoryRoutes,
+};

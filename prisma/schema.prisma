@@ -90,6 +90,7 @@ model order_details {
 model categories {
   id            Int        @id @default(autoincrement())
   category_name String
+  category_image String?
   products      products[]
 }
 
