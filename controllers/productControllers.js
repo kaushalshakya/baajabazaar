@@ -48,12 +48,15 @@ const createProduct = asyncHandler(async (req, res) => {
       message: "Your are not authorized to view this page",
     });
   }
+
+  console.log(image);
   const data = {
     product_name: req.body.product_name,
     product_price: parseInt(req.body.product_price),
     product_image: req.file.filename,
     product_description: req.body.product_description,
     vendor_id: id,
+    product_category: req.body.product_category,
   };
 
   const result = await postProduct(data);
@@ -89,7 +92,7 @@ const updateProduct = asyncHandler(async (req, res) => {
       ? req.body.product_name
       : product.product_name,
     product_price: req.body.product_price
-      ? req.body.product_price
+      ? parseInt(req.body.product_price)
       : product.product_price,
     product_image: image ? image.filename : product.product_image,
     product_description: req.body.product_description

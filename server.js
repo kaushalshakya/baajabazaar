@@ -20,7 +20,7 @@ const PORT = process.env.PORT || 4000;
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
-app.use(express.static("uploads"));
+app.use("/uploads", express.static("uploads"));
 
 const verifyJwt = require("./middlewares/verifyJWT");
 const handler404 = require("./middlewares/404handler");
