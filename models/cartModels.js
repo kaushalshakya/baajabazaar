@@ -7,6 +7,9 @@ const getCart = asyncHandler(async (user_id) => {
     where: {
       user_id,
     },
+    include: {
+      product: true,
+    },
   });
   await prisma.$disconnect();
   return response;
@@ -34,19 +37,24 @@ const postCart = asyncHandler(async (fields) => {
   return response;
 });
 
-const putCart = asyncHandler(async (quantity, totalAmount, id) => {
-  const response = await prisma.cart_details.update({
-    where: {
-      id,
-    },
-    data: {
-      quantity,
-      total_amount: totalAmount,
-    },
-  });
-  await prisma.$disconnect();
-  return response;
-});
+const putCart = async ({ quantity, totalAmount, id }) => {
+  try {
+    const response = await prisma.cart_details.update({
+      where: {
+        id,
+      },
+      data: {
+        quantity,
+        total_amount: totalAmount,
+      },
+    });
+    return response;
+  } catch (err) {
+    console.log(err);
+  } finally {
+    await prisma.$disconnect();
+  }
+};
 
 const deleteCartItem = asyncHandler(async (id) => {
   const respone = await prisma.cart_details.delete({
